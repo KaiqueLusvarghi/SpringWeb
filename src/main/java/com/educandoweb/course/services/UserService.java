@@ -9,27 +9,39 @@ import org.springframework.stereotype.Service;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
 
-
-@Service // registra um serviço nasua camada de servio 
+@Service // registra um serviço nasua camada de servio
 public class UserService {
-    @Autowired //injeção de dependências 
+    @Autowired // injeção de dependências
     private UserRepository repository;
 
-    //metodo para retonar todos os usuario do banco / endpoint get que retorna todos os id
-    public List<User> findAll(){
+    // metodo para retonar todos os usuario do banco / endpoint get que retorna
+    // todos os id
+    public List<User> findAll() {
         return repository.findAll();
     }
 
-    public User findById(Long id){
+    public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
         return obj.get();
     }
 
-    public User insert (User obj){
+    public User insert(User obj) {
         return repository.save(obj);
     }
 
-    public void delete (Long id) {
+    public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public User update(Long id, User obj) {
+        User entity = repository.getReferenceById(id);
+        updateData(entity, obj);
+        return repository.save(entity);
+    }
+
+    private void updateData(User entity, User obj) {
+        entity.setName(obj.getName());
+        entity.setEmail(obj.getEmail());
+        entity.setPhone(obj.getPhone());
     }
 }
